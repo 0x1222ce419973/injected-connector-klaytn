@@ -271,7 +271,7 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
         window.klaytn.on('networkChanged', _this5.handleNetworkChanged);
       }
 
-      if (window.klaytn.isMetaMask) {
+      if (window.klaytn.isKaikas) {
         ;
         window.klaytn.autoRefreshOnNetworkChange = false;
       } // try to activate + get account via eth_requestAccounts
@@ -280,7 +280,8 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
       var account;
 
       var _temp6 = _catch(function () {
-        return Promise.resolve(window.klaytn.send('eth_requestAccounts').then(function (sendReturn) {
+        return Promise.resolve(window.klaytn.send('klay_accounts').then(function (sendReturn) {
+          console.log('sendReturn', sendReturn);
           return parseSendReturn(sendReturn)[0];
         })).then(function (_window$klaytn$send$t) {
           account = _window$klaytn$send$t;

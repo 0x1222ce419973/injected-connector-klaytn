@@ -140,19 +140,19 @@ function parseSendReturn(sendReturn) {
   return sendReturn.hasOwnProperty('result') ? sendReturn.result : sendReturn;
 }
 
-var NoEthereumProviderError = /*#__PURE__*/function (_Error) {
-  _inheritsLoose(NoEthereumProviderError, _Error);
+var NoKlaytnProviderError = /*#__PURE__*/function (_Error) {
+  _inheritsLoose(NoKlaytnProviderError, _Error);
 
-  function NoEthereumProviderError() {
+  function NoKlaytnProviderError() {
     var _this;
 
     _this = _Error.call(this) || this;
     _this.name = _this.constructor.name;
-    _this.message = 'No Ethereum provider was found on window.ethereum.';
+    _this.message = 'No Klaytn provider was found on window.klaytn.';
     return _this;
   }
 
-  return NoEthereumProviderError;
+  return NoKlaytnProviderError;
 }( /*#__PURE__*/_wrapNativeSuper(Error));
 var UserRejectedRequestError = /*#__PURE__*/function (_Error2) {
   _inheritsLoose(UserRejectedRequestError, _Error2);
@@ -191,7 +191,7 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
 
     this.emitUpdate({
       chainId: chainId,
-      provider: window.ethereum
+      provider: window.klaytn
     });
   };
 
@@ -224,7 +224,7 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
 
     this.emitUpdate({
       chainId: networkId,
-      provider: window.ethereum
+      provider: window.klaytn
     });
   };
 
@@ -239,7 +239,7 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
 
         function _temp2() {
           return _extends({
-            provider: window.ethereum
+            provider: window.klaytn
           }, account ? {
             account: account
           } : {});
@@ -248,10 +248,10 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
         var _temp = function () {
           if (!account) {
             // if enable is successful but doesn't return accounts, fall back to getAccount (not happy i have to do this...)
-            return Promise.resolve(window.ethereum.enable().then(function (sendReturn) {
+            return Promise.resolve(window.klaytn.enable().then(function (sendReturn) {
               return sendReturn && parseSendReturn(sendReturn)[0];
-            })).then(function (_window$ethereum$enab) {
-              account = _window$ethereum$enab;
+            })).then(function (_window$klaytn$enable) {
+              account = _window$klaytn$enable;
             });
           }
         }();
@@ -260,30 +260,30 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
         return _temp && _temp.then ? _temp.then(_temp2) : _temp2(_temp);
       };
 
-      if (!window.ethereum) {
-        throw new NoEthereumProviderError();
+      if (!window.klaytn) {
+        throw new NoKlaytnProviderError();
       }
 
-      if (window.ethereum.on) {
-        window.ethereum.on('chainChanged', _this5.handleChainChanged);
-        window.ethereum.on('accountsChanged', _this5.handleAccountsChanged);
-        window.ethereum.on('close', _this5.handleClose);
-        window.ethereum.on('networkChanged', _this5.handleNetworkChanged);
+      if (window.klaytn.on) {
+        window.klaytn.on('chainChanged', _this5.handleChainChanged);
+        window.klaytn.on('accountsChanged', _this5.handleAccountsChanged);
+        window.klaytn.on('close', _this5.handleClose);
+        window.klaytn.on('networkChanged', _this5.handleNetworkChanged);
       }
 
-      if (window.ethereum.isMetaMask) {
+      if (window.klaytn.isMetaMask) {
         ;
-        window.ethereum.autoRefreshOnNetworkChange = false;
+        window.klaytn.autoRefreshOnNetworkChange = false;
       } // try to activate + get account via eth_requestAccounts
 
 
       var account;
 
       var _temp6 = _catch(function () {
-        return Promise.resolve(window.ethereum.send('eth_requestAccounts').then(function (sendReturn) {
+        return Promise.resolve(window.klaytn.send('eth_requestAccounts').then(function (sendReturn) {
           return parseSendReturn(sendReturn)[0];
-        })).then(function (_window$ethereum$send) {
-          account = _window$ethereum$send;
+        })).then(function (_window$klaytn$send$t) {
+          account = _window$klaytn$send$t;
         });
       }, function (error) {
         if (error.code === 4001) {
@@ -301,7 +301,7 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
 
   _proto.getProvider = function getProvider() {
     try {
-      return Promise.resolve(window.ethereum);
+      return Promise.resolve(window.klaytn);
     } catch (e) {
       return Promise.reject(e);
     }
@@ -313,7 +313,7 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
         function _temp9() {
           if (!chainId) {
             try {
-              chainId = parseSendReturn(window.ethereum.send({
+              chainId = parseSendReturn(window.klaytn.send({
                 method: 'net_version'
               }));
             } catch (_unused) {
@@ -322,10 +322,10 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
           }
 
           if (!chainId) {
-            if (window.ethereum.isDapper) {
-              chainId = parseSendReturn(window.ethereum.cachedResults.net_version);
+            if (window.klaytn.isDapper) {
+              chainId = parseSendReturn(window.klaytn.cachedResults.net_version);
             } else {
-              chainId = window.ethereum.chainId || window.ethereum.netVersion || window.ethereum.networkVersion || window.ethereum._chainId;
+              chainId = window.klaytn.chainId || window.klaytn.netVersion || window.klaytn.networkVersion || window.klaytn._chainId;
             }
           }
 
@@ -335,8 +335,8 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
         var _temp8 = function () {
           if (!chainId) {
             var _temp12 = _catch(function () {
-              return Promise.resolve(window.ethereum.send('net_version').then(parseSendReturn)).then(function (_window$ethereum$send3) {
-                chainId = _window$ethereum$send3;
+              return Promise.resolve(window.klaytn.send('net_version').then(parseSendReturn)).then(function (_window$klaytn$send$t3) {
+                chainId = _window$klaytn$send$t3;
               });
             }, function () {
               process.env.NODE_ENV !== "production" ? warning(false, 'net_version was unsuccessful, falling back to net version v2') : void 0;
@@ -349,15 +349,15 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
         return _temp8 && _temp8.then ? _temp8.then(_temp9) : _temp9(_temp8);
       };
 
-      if (!window.ethereum) {
-        throw new NoEthereumProviderError();
+      if (!window.klaytn) {
+        throw new NoKlaytnProviderError();
       }
 
       var chainId;
 
       var _temp14 = _catch(function () {
-        return Promise.resolve(window.ethereum.send('eth_chainId').then(parseSendReturn)).then(function (_window$ethereum$send2) {
-          chainId = _window$ethereum$send2;
+        return Promise.resolve(window.klaytn.send('eth_chainId').then(parseSendReturn)).then(function (_window$klaytn$send$t2) {
+          chainId = _window$klaytn$send$t2;
         });
       }, function () {
         process.env.NODE_ENV !== "production" ? warning(false, 'eth_chainId was unsuccessful, falling back to net_version') : void 0;
@@ -374,7 +374,7 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
       var _temp21 = function _temp21() {
         function _temp17() {
           if (!account) {
-            account = parseSendReturn(window.ethereum.send({
+            account = parseSendReturn(window.klaytn.send({
               method: 'eth_accounts'
             }))[0];
           }
@@ -385,10 +385,10 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
         var _temp16 = function () {
           if (!account) {
             var _temp20 = _catch(function () {
-              return Promise.resolve(window.ethereum.enable().then(function (sendReturn) {
+              return Promise.resolve(window.klaytn.enable().then(function (sendReturn) {
                 return parseSendReturn(sendReturn)[0];
-              })).then(function (_window$ethereum$enab2) {
-                account = _window$ethereum$enab2;
+              })).then(function (_window$klaytn$enable2) {
+                account = _window$klaytn$enable2;
               });
             }, function () {
               process.env.NODE_ENV !== "production" ? warning(false, 'enable was unsuccessful, falling back to eth_accounts v2') : void 0;
@@ -401,17 +401,17 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
         return _temp16 && _temp16.then ? _temp16.then(_temp17) : _temp17(_temp16);
       };
 
-      if (!window.ethereum) {
-        throw new NoEthereumProviderError();
+      if (!window.klaytn) {
+        throw new NoKlaytnProviderError();
       }
 
       var account;
 
       var _temp22 = _catch(function () {
-        return Promise.resolve(window.ethereum.send('eth_accounts').then(function (sendReturn) {
+        return Promise.resolve(window.klaytn.send('eth_accounts').then(function (sendReturn) {
           return parseSendReturn(sendReturn)[0];
-        })).then(function (_window$ethereum$send4) {
-          account = _window$ethereum$send4;
+        })).then(function (_window$klaytn$send$t4) {
+          account = _window$klaytn$send$t4;
         });
       }, function () {
         process.env.NODE_ENV !== "production" ? warning(false, 'eth_accounts was unsuccessful, falling back to enable') : void 0;
@@ -424,22 +424,22 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
   };
 
   _proto.deactivate = function deactivate() {
-    if (window.ethereum && window.ethereum.removeListener) {
-      window.ethereum.removeListener('chainChanged', this.handleChainChanged);
-      window.ethereum.removeListener('accountsChanged', this.handleAccountsChanged);
-      window.ethereum.removeListener('close', this.handleClose);
-      window.ethereum.removeListener('networkChanged', this.handleNetworkChanged);
+    if (window.klaytn && window.klaytn.removeListener) {
+      window.klaytn.removeListener('chainChanged', this.handleChainChanged);
+      window.klaytn.removeListener('accountsChanged', this.handleAccountsChanged);
+      window.klaytn.removeListener('close', this.handleClose);
+      window.klaytn.removeListener('networkChanged', this.handleNetworkChanged);
     }
   };
 
   _proto.isAuthorized = function isAuthorized() {
     try {
-      if (!window.ethereum) {
+      if (!window.klaytn) {
         return Promise.resolve(false);
       }
 
       return Promise.resolve(_catch(function () {
-        return Promise.resolve(window.ethereum.send('eth_accounts').then(function (sendReturn) {
+        return Promise.resolve(window.klaytn.send('eth_accounts').then(function (sendReturn) {
           if (parseSendReturn(sendReturn).length > 0) {
             return true;
           } else {
@@ -457,5 +457,5 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
   return InjectedConnector;
 }(AbstractConnector);
 
-export { InjectedConnector, NoEthereumProviderError, UserRejectedRequestError };
+export { InjectedConnector, NoKlaytnProviderError, UserRejectedRequestError };
 //# sourceMappingURL=injected-connector.esm.js.map

@@ -1,6 +1,6 @@
 import { AbstractConnectorArguments, ConnectorUpdate } from '@web3-react/types';
 import { AbstractConnector } from '@web3-react/abstract-connector';
-export declare class NoEthereumProviderError extends Error {
+export declare class NoKlaytnProviderError extends Error {
     constructor();
 }
 export declare class UserRejectedRequestError extends Error {

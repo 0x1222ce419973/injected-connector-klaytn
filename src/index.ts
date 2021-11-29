@@ -78,16 +78,17 @@ export class InjectedConnector extends AbstractConnector {
       window.klaytn.on('networkChanged', this.handleNetworkChanged)
     }
 
-    if ((window.klaytn as any).isMetaMask) {
+    if ((window.klaytn as any).isKaikas) {
       ;(window.klaytn as any).autoRefreshOnNetworkChange = false
     }
 
     // try to activate + get account via eth_requestAccounts
     let account
     try {
-      account = await (window.klaytn.send as Send)('eth_requestAccounts').then(
-        sendReturn => parseSendReturn(sendReturn)[0]
-      )
+      account = await (window.klaytn.send as Send)('klay_accounts').then(sendReturn => {
+        console.log(sendReturn)
+        parseSendReturn(sendReturn)[0]
+      })
     } catch (error) {
       if ((error as any).code === 4001) {
         throw new UserRejectedRequestError()

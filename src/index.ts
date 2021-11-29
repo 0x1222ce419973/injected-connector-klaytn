@@ -86,8 +86,8 @@ export class InjectedConnector extends AbstractConnector {
     let account
     try {
       account = await (window.klaytn.send as Send)('klay_accounts').then(sendReturn => {
-        console.log(sendReturn)
-        parseSendReturn(sendReturn)[0]
+        console.log('sendReturn', sendReturn)
+        return parseSendReturn(sendReturn)[0]
       })
     } catch (error) {
       if ((error as any).code === 4001) {

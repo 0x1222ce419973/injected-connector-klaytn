@@ -281,7 +281,6 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
 
       var _temp6 = _catch(function () {
         return Promise.resolve(window.klaytn.send('klay_accounts').then(function (sendReturn) {
-          console.log('sendReturn', sendReturn);
           return parseSendReturn(sendReturn)[0];
         })).then(function (_window$klaytn$send$t) {
           account = _window$klaytn$send$t;
@@ -291,7 +290,7 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
           throw new UserRejectedRequestError();
         }
 
-        process.env.NODE_ENV !== "production" ? warning(false, 'eth_requestAccounts was unsuccessful, falling back to enable') : void 0;
+        process.env.NODE_ENV !== "production" ? warning(false, 'klay_account was unsuccessful, falling back to enable') : void 0;
       });
 
       return Promise.resolve(_temp6 && _temp6.then ? _temp6.then(_temp5) : _temp5(_temp6));
@@ -310,44 +309,18 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
 
   _proto.getChainId = function getChainId() {
     try {
-      var _temp13 = function _temp13() {
-        function _temp9() {
+      var _temp10 = function _temp10() {
+        var _temp7 = function () {
           if (!chainId) {
-            try {
-              chainId = parseSendReturn(window.klaytn.send({
-                method: 'net_version'
-              }));
-            } catch (_unused) {
-              process.env.NODE_ENV !== "production" ? warning(false, 'net_version v2 was unsuccessful, falling back to manual matches and static properties') : void 0;
-            }
-          }
-
-          if (!chainId) {
-            if (window.klaytn.isDapper) {
-              chainId = parseSendReturn(window.klaytn.cachedResults.net_version);
-            } else {
-              chainId = window.klaytn.chainId || window.klaytn.netVersion || window.klaytn.networkVersion || window.klaytn._chainId;
-            }
-          }
-
-          return chainId;
-        }
-
-        var _temp8 = function () {
-          if (!chainId) {
-            var _temp12 = _catch(function () {
-              return Promise.resolve(window.klaytn.send('net_version').then(parseSendReturn)).then(function (_window$klaytn$send$t3) {
-                chainId = _window$klaytn$send$t3;
-              });
-            }, function () {
-              process.env.NODE_ENV !== "production" ? warning(false, 'net_version was unsuccessful, falling back to net version v2') : void 0;
+            return Promise.resolve(window.klaytn.networkVersion).then(function (_window$klaytn$networ) {
+              chainId = _window$klaytn$networ;
             });
-
-            if (_temp12 && _temp12.then) return _temp12.then(function () {});
           }
         }();
 
-        return _temp8 && _temp8.then ? _temp8.then(_temp9) : _temp9(_temp8);
+        return _temp7 && _temp7.then ? _temp7.then(function () {
+          return chainId;
+        }) : chainId;
       };
 
       if (!window.klaytn) {
@@ -356,15 +329,15 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
 
       var chainId;
 
-      var _temp14 = _catch(function () {
-        return Promise.resolve(window.klaytn.send('eth_chainId').then(parseSendReturn)).then(function (_window$klaytn$send$t2) {
+      var _temp11 = _catch(function () {
+        return Promise.resolve(window.klaytn.send('klay_chainId').then(parseSendReturn)).then(function (_window$klaytn$send$t2) {
           chainId = _window$klaytn$send$t2;
         });
       }, function () {
-        process.env.NODE_ENV !== "production" ? warning(false, 'eth_chainId was unsuccessful, falling back to net_version') : void 0;
+        process.env.NODE_ENV !== "production" ? warning(false, 'klay_chainId was unsuccessful, falling back to net_version') : void 0;
       });
 
-      return Promise.resolve(_temp14 && _temp14.then ? _temp14.then(_temp13) : _temp13(_temp14));
+      return Promise.resolve(_temp11 && _temp11.then ? _temp11.then(_temp10) : _temp10(_temp11));
     } catch (e) {
       return Promise.reject(e);
     }
@@ -372,34 +345,26 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
 
   _proto.getAccount = function getAccount() {
     try {
-      var _temp21 = function _temp21() {
-        function _temp17() {
+      var _temp17 = function _temp17() {
+        var _temp13 = function () {
           if (!account) {
-            account = parseSendReturn(window.klaytn.send({
-              method: 'eth_accounts'
-            }))[0];
-          }
-
-          return account;
-        }
-
-        var _temp16 = function () {
-          if (!account) {
-            var _temp20 = _catch(function () {
+            var _temp16 = _catch(function () {
               return Promise.resolve(window.klaytn.enable().then(function (sendReturn) {
                 return parseSendReturn(sendReturn)[0];
               })).then(function (_window$klaytn$enable2) {
                 account = _window$klaytn$enable2;
               });
             }, function () {
-              process.env.NODE_ENV !== "production" ? warning(false, 'enable was unsuccessful, falling back to eth_accounts v2') : void 0;
+              process.env.NODE_ENV !== "production" ? warning(false, 'enable was unsuccessful, falling back to klay_accounts v2') : void 0;
             });
 
-            if (_temp20 && _temp20.then) return _temp20.then(function () {});
+            if (_temp16 && _temp16.then) return _temp16.then(function () {});
           }
         }();
 
-        return _temp16 && _temp16.then ? _temp16.then(_temp17) : _temp17(_temp16);
+        return _temp13 && _temp13.then ? _temp13.then(function () {
+          return account;
+        }) : account;
       };
 
       if (!window.klaytn) {
@@ -408,17 +373,17 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
 
       var account;
 
-      var _temp22 = _catch(function () {
-        return Promise.resolve(window.klaytn.send('eth_accounts').then(function (sendReturn) {
+      var _temp18 = _catch(function () {
+        return Promise.resolve(window.klaytn.send('klay_accounts').then(function (sendReturn) {
           return parseSendReturn(sendReturn)[0];
-        })).then(function (_window$klaytn$send$t4) {
-          account = _window$klaytn$send$t4;
+        })).then(function (_window$klaytn$send$t3) {
+          account = _window$klaytn$send$t3;
         });
       }, function () {
-        process.env.NODE_ENV !== "production" ? warning(false, 'eth_accounts was unsuccessful, falling back to enable') : void 0;
+        process.env.NODE_ENV !== "production" ? warning(false, 'klay_accounts was unsuccessful, falling back to enable') : void 0;
       });
 
-      return Promise.resolve(_temp22 && _temp22.then ? _temp22.then(_temp21) : _temp21(_temp22));
+      return Promise.resolve(_temp18 && _temp18.then ? _temp18.then(_temp17) : _temp17(_temp18));
     } catch (e) {
       return Promise.reject(e);
     }
@@ -440,7 +405,7 @@ var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
       }
 
       return Promise.resolve(_catch(function () {
-        return Promise.resolve(window.klaytn.send('eth_accounts').then(function (sendReturn) {
+        return Promise.resolve(window.klaytn.send('klay_accounts').then(function (sendReturn) {
           if (parseSendReturn(sendReturn).length > 0) {
             return true;
           } else {
